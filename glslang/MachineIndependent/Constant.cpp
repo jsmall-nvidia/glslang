@@ -284,7 +284,20 @@ TIntermTyped* TIntermConstantUnion::fold(TOperator op, const TIntermTyped* right
         returnType.shallowCopy(TType(getBasicType(), EvqConst, rightNode->getMatrixCols()));
         break;
 
+#ifdef NV_EXTENSIONS
+	case EOpRem:
+		// % is not defined in glsl if either of the numbers are negative.
+		// Note that in practice it can mean a different result if the number is calculated with constant folding 
+		// and on hardware.
+		// 
+		// The code below uses % which in C++ means 'remainder'. So we can use the code below to calculate 
+		// the remainder correctly.
+#endif
+
     case EOpMod:
+		// Using % here is okay for modulus calculation because the result is undefined with negative numbers 
+		// from the glsl spec. 
+		// 
         for (int i = 0; i < newComps; i++) {
             if (rightUnionArray[i] == 0)
                 newConstArray[i] = leftUnionArray[i];
@@ -308,48 +321,13 @@ TIntermTyped* TIntermConstantUnion::fold(TOperator op, const TIntermTyped* right
                     } else goto modulo_default;
 #endif
                 default:
-                modulo_default:
+				modulo_default:
+					// % in C++ is remainder. For positive numbers it is the same as modulo.
                     newConstArray[i] = leftUnionArray[i] % rightUnionArray[i];
                 }
             }
         }
         break;
-#ifdef NV_EXTENSIONS
-	case EOpRem:
-		// TODO(JS): Need to handle constant folding for rem operator
-		for (int i = 0; i < newComps; i++) {
-			if (rightUnionArray[i] == 0)
-				newConstArray[i] = leftUnionArray[i];
-			else {
-				switch (getType().getBasicType()) {
-					case EbtInt:
-						if (rightUnionArray[i].getIConst() == -1 && leftUnionArray[i].getIConst() == INT_MIN) {
-							newConstArray[i].setIConst(0);
-							break;
-						}
-						else goto remainder_default;
-#ifndef GLSLANG_WEB
-					case EbtInt64:
-						if (rightUnionArray[i].getI64Const() == -1 && leftUnionArray[i].getI64Const() == LLONG_MIN) {
-							newConstArray[i].setI64Const(0);
-							break;
-						}
-						else goto remainder_default;
-					case EbtInt16:
-						if (rightUnionArray[i].getIConst() == -1 && leftUnionArray[i].getIConst() == SHRT_MIN) {
-							newConstArray[i].setIConst(0);
-							break;
-						}
-						else goto remainder_default;
-#endif
-					default:
-					remainder_default:
-						newConstArray[i] = leftUnionArray[i] % rightUnionArray[i];
-				}
-			}
-		}
-		break;
-#endif
 
     case EOpRightShift:
         for (int i = 0; i < newComps; i++)

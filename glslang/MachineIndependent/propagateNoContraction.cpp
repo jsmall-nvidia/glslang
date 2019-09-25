@@ -169,6 +169,10 @@ bool isArithmeticOperation(glslang::TOperator op)
     case glslang::EOpDiv:
     case glslang::EOpMod:
 
+#ifdef NV_EXTENSIONS
+	case glslang::EOpRem:
+#endif
+
     case glslang::EOpVectorTimesScalar:
     case glslang::EOpVectorTimesMatrix:
     case glslang::EOpMatrixTimesVector:

@@ -209,6 +209,9 @@ const BuiltInFunction BaseFunctions[] = {
     { EOpCeil,             "ceil",             1,   TypeF,     ClassRegular, nullptr },
     { EOpFract,            "fract",            1,   TypeF,     ClassRegular, nullptr },
     { EOpMod,              "mod",              2,   TypeF,     ClassLS,      nullptr },
+#ifdef NV_EXTENSIONS
+	{ EOpRem,              "rem",              2,   TypeFI,     ClassLS,     nullptr},
+#endif
     { EOpMin,              "min",              2,   TypeF,     ClassLS,      nullptr },
     { EOpMax,              "max",              2,   TypeF,     ClassLS,      nullptr },
     { EOpClamp,            "clamp",            3,   TypeF,     ClassLS2,     nullptr },

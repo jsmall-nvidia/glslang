@@ -1167,6 +1167,10 @@ void TBuiltInParseablesHlsl::identifyBuiltIns(int /*version*/, EProfile /*profil
     symbolTable.relateToOperator("max",                         EOpMax);
     symbolTable.relateToOperator("min",                         EOpMin);
     symbolTable.relateToOperator("modf",                        EOpModf);
+
+#ifdef NV_EXTENSIONS
+	symbolTable.relateToOperator("rem",                         EOpRem);
+#endif
     // symbolTable.relateToOperator("msad4",                       EOpMsad4);
     symbolTable.relateToOperator("mul",                         EOpGenMul);
     // symbolTable.relateToOperator("noise",                    EOpNoise); // TODO: check return type

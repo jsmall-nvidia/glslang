@@ -189,6 +189,9 @@ bool TOutputTraverser::visitBinary(TVisit /* visit */, TIntermBinary* node)
     case EOpMul:    out.debug << "component-wise multiply"; break;
     case EOpDiv:    out.debug << "divide";                  break;
     case EOpMod:    out.debug << "mod";                     break;
+#ifdef NV_EXTENSIONS
+	case EOpRem:	out.debug << "rem";						break;
+#endif
     case EOpRightShift:  out.debug << "right-shift";  break;
     case EOpLeftShift:   out.debug << "left-shift";   break;
     case EOpAnd:         out.debug << "bitwise and";  break;
@@ -825,6 +828,10 @@ bool TOutputTraverser::visitAggregate(TVisit /* visit */, TIntermAggregate* node
     case EOpGreaterThanEqual: out.debug << "Compare Greater Than or Equal"; break;
     case EOpVectorEqual:      out.debug << "Equal";                         break;
     case EOpVectorNotEqual:   out.debug << "NotEqual";                      break;
+
+#ifdef NV_EXTENSIONS
+	case EOpRem:           out.debug << "rem";         break;
+#endif
 
     case EOpMod:           out.debug << "mod";         break;
     case EOpModf:          out.debug << "modf";        break;

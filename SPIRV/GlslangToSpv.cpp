@@ -2546,6 +2546,12 @@ bool TGlslangToSpvTraverser::visitAggregate(glslang::TVisit visit, glslang::TInt
         binOp = glslang::EOpMod;
         break;
 
+#ifdef NV_EXTENSIONS
+	case glslang::EOpRem:
+		binOp = glslang::EOpRem;
+		break;
+#endif
+
 #ifndef GLSLANG_WEB
     case glslang::EOpEmitVertex:
     case glslang::EOpEndPrimitive:
@@ -5176,6 +5182,16 @@ spv::Id TGlslangToSpvTraverser::createBinaryOperation(glslang::TOperator op, OpD
         else
             binOp = spv::OpSMod;
         break;
+#ifdef NV_EXTENSIONS
+	case glslang::EOpRem:
+		if (isFloat)
+			binOp = spv::OpFRem;
+		else if (isUnsigned)
+			binOp = spv::OpUMod;
+		else
+			binOp = spv::OpSRem;
+		break;
+#endif
     case glslang::EOpRightShift:
     case glslang::EOpRightShiftAssign:
         if (isUnsigned)

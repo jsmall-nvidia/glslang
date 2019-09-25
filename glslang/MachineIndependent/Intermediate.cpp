@@ -914,6 +914,10 @@ TIntermediate::addConversion(TOperator op, TIntermTyped* node0, TIntermTyped* no
     case EOpDiv:
     case EOpMod:
 
+#ifdef NV_EXTENSIONS
+	case EOpRem:
+#endif
+
     case EOpVectorTimesScalar:
     case EOpVectorTimesMatrix:
     case EOpMatrixTimesVector:
@@ -3034,7 +3038,6 @@ bool TIntermediate::isSpecializationOperation(const TIntermOperator& node) const
     case EOpMul:
     case EOpVectorTimesScalar:
     case EOpDiv:
-    case EOpMod:
     case EOpRightShift:
     case EOpLeftShift:
     case EOpAnd:
@@ -3080,6 +3083,9 @@ bool TIntermediate::isNonuniformPropagating(TOperator op) const
     case EOpMul:
     case EOpDiv:
     case EOpMod:
+#ifdef NV_EXTENSIONS
+	case EOpRem:
+#endif
     case EOpRightShift:
     case EOpLeftShift:
     case EOpAnd:
@@ -3306,6 +3312,10 @@ bool TIntermediate::promoteBinary(TIntermBinary& node)
 
         case EOpMod:
 
+#ifdef NV_EXTENSIONS
+		case EOpRem:
+#endif
+
         case EOpAnd:
         case EOpInclusiveOr:
         case EOpExclusiveOr:
@@ -3386,6 +3396,10 @@ bool TIntermediate::promoteBinary(TIntermBinary& node)
     case EOpRightShiftAssign:
     case EOpLeftShiftAssign:
 
+#ifdef NV_EXTENSIONS
+	case EOpRem:
+#endif
+
     case EOpMod:
     case EOpModAssign:
 
@@ -3438,6 +3452,10 @@ bool TIntermediate::promoteBinary(TIntermBinary& node)
     case EOpLogicalOr:
     case EOpLogicalXor:
         return left->getType() == right->getType();
+
+#ifdef NV_EXTENSIONS
+	case EOpRem:
+#endif
 
     case EOpMod:
     case EOpModAssign:
@@ -3606,6 +3624,9 @@ bool TIntermediate::promoteBinary(TIntermBinary& node)
     case EOpAdd:
     case EOpSub:
     case EOpDiv:
+#ifdef NV_EXTENSIONS
+	case EOpRem:
+#endif
     case EOpMod:
     case EOpAnd:
     case EOpInclusiveOr:
@@ -3687,6 +3708,9 @@ bool TIntermediate::promoteAggregate(TIntermAggregate& node)
     // case EOpFindMSB: TODO:
     // case EOpFindLSB: TODO:
     case EOpFma:
+#ifdef NV_EXTENSIONS
+	case EOpRem:
+#endif
     case EOpMod:
     case EOpFrexp:
     case EOpLdexp:

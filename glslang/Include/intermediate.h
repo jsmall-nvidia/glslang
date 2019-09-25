@@ -288,6 +288,9 @@ enum TOperator {
     EOpMul,
     EOpDiv,
     EOpMod,
+#ifdef NV_EXTENSIONS
+	EOpRem,
+#endif
     EOpRightShift,
     EOpLeftShift,
     EOpAnd,

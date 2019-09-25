@@ -314,6 +314,42 @@ TIntermTyped* TIntermConstantUnion::fold(TOperator op, const TIntermTyped* right
             }
         }
         break;
+#ifdef NV_EXTENSIONS
+	case EOpRem:
+		// TODO(JS): Need to handle constant folding for rem operator
+		for (int i = 0; i < newComps; i++) {
+			if (rightUnionArray[i] == 0)
+				newConstArray[i] = leftUnionArray[i];
+			else {
+				switch (getType().getBasicType()) {
+					case EbtInt:
+						if (rightUnionArray[i].getIConst() == -1 && leftUnionArray[i].getIConst() == INT_MIN) {
+							newConstArray[i].setIConst(0);
+							break;
+						}
+						else goto remainder_default;
+#ifndef GLSLANG_WEB
+					case EbtInt64:
+						if (rightUnionArray[i].getI64Const() == -1 && leftUnionArray[i].getI64Const() == LLONG_MIN) {
+							newConstArray[i].setI64Const(0);
+							break;
+						}
+						else goto remainder_default;
+					case EbtInt16:
+						if (rightUnionArray[i].getIConst() == -1 && leftUnionArray[i].getIConst() == SHRT_MIN) {
+							newConstArray[i].setIConst(0);
+							break;
+						}
+						else goto remainder_default;
+#endif
+					default:
+					remainder_default:
+						newConstArray[i] = leftUnionArray[i] % rightUnionArray[i];
+				}
+			}
+		}
+		break;
+#endif
 
     case EOpRightShift:
         for (int i = 0; i < newComps; i++)
